@@ -16,6 +16,17 @@ class TestTaskAction1 : AnAction() {
         // Using the event, evaluate the context, and enable or disable the action.
     }
 
+    override fun actionPerformed(e: AnActionEvent) {
+        //Using the event, implement an action. For example, create and show a dialog.
+        val currentProject: Project = e.project!!
+        Messages.showMessageDialog(
+                currentProject,
+                getKotlinPluginVersion(),
+                "Kotlin plugin version:",
+                Messages.getInformationIcon()
+        )
+    }
+
     private fun getKotlinPluginVersion(): String? {
         val kotlinPluginId = PluginId.findId("org.jetbrains.kotlin")?: return "Plugin version not found :c"
         val kotlinPluginInstalled: Boolean = PluginManager.isPluginInstalled(kotlinPluginId)
@@ -25,11 +36,5 @@ class TestTaskAction1 : AnAction() {
         } else {
             return "Plugin is not installed :c"
         }
-    }
-
-    override fun actionPerformed(e: AnActionEvent) {
-        //Using the event, implement an action. For example, create and show a dialog.
-        val currentProject: Project = e.project!!
-        Messages.showMessageDialog(currentProject, getKotlinPluginVersion(), "Kotlin plugin version:", Messages.getInformationIcon())
     }
 }

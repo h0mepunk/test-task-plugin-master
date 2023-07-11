@@ -31,10 +31,10 @@ class TestTaskAction1 : AnAction() {
         val kotlinPluginId = PluginId.findId("org.jetbrains.kotlin")?: return "Plugin version not found :c"
         val kotlinPluginInstalled: Boolean = PluginManager.isPluginInstalled(kotlinPluginId)
 
-        if (kotlinPluginInstalled) {
-            return PluginManagerCore.findPlugin(kotlinPluginId)!!.version
+        return if (kotlinPluginInstalled) {
+            PluginManagerCore.findPlugin(kotlinPluginId)!!.version
         } else {
-            return "Plugin is not installed :c"
+            "Plugin is not installed :c"
         }
     }
 }

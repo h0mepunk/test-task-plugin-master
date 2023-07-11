@@ -4,7 +4,8 @@ import com.intellij.execution.*
 import com.intellij.execution.executors.DefaultRunExecutor
 import com.intellij.execution.process.ProcessEvent
 import com.intellij.execution.process.ProcessListener
-import com.intellij.execution.runToolbar.environment
+import com.intellij.execution.runners.ExecutionEnvironment
+import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.ui.RunContentManager
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
@@ -39,23 +40,36 @@ class TestTaskAction4: AnAction() {
         var exitCode = "no exit code"
         val executionManager = ExecutionManager.getInstance(project)
         val runContentManager = RunContentManager.getInstance(project)
-        val executionEnvironment = e.environment()?: return "no environment"
-        executionManager.restartRunProfile(executionEnvironment)
+        val executor = DefaultRunExecutor.getRunExecutorInstance()
+
+        val runManager = RunManager.getInstance(project)
+        val config =  runManager.tempConfigurationsList.first() // MainKt
+        val runner = ProgramRunner.findRunnerById(DefaultRunExecutor.EXECUTOR_ID)?: return "no runner"
+        val environment = ExecutionEnvironment(executor, runner, config, project)
+        executionManager.restartRunProfile(environment)
 
         val contentDescriptor = executionManager.getContentManager().selectedContent?: return "no content descriptor"
-        val executor = DefaultRunExecutor.getRunExecutorInstance()
         runContentManager.showRunContent(executor,contentDescriptor)
 
-
-        val processHandler = contentDescriptor!!.processHandler
         val processListener = object : ProcessListener {
             override fun processTerminated(event: ProcessEvent) {
                 exitCode = event.exitCode.toString()
             }
         }
 
-        processHandler?.addProcessListener(processListener)
-        processHandler?.startNotify()
+        val runProcess = executionManager.getRunningProcesses().first()
+        runProcess.addProcessListener(processListener)
+        Waiter().waitForUpdated(runProcess.isProcessTerminated)
+        return runProcess.exitCode.toString()
+//        val processHandler = contentDescriptor!!.processHandler
+//        val processListener = object : ProcessListener {
+//            override fun processTerminated(event: ProcessEvent) {
+//                exitCode = event.exitCode.toString()
+//            }
+//        }
+//
+//        processHandler?.addProcessListener(processListener)
+//        processHandler?.startNotify()
         return exitCode
     }
 }

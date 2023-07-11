@@ -35,26 +35,10 @@ class TestTaskAction3: AnAction() {
     private fun getLineMarkersForFile(project: Project): String {
         val editor = FileEditorManager.getInstance(project).selectedTextEditor
         val psiFile = editor?.document?: return "Document in editor is empty"
-        waitForUpdated(editor.document.isInBulkUpdate)
+        val waiter = Waiter()
+        waiter.waitForUpdated(editor.document.isInBulkUpdate)
 
         val lineMarkers = DaemonCodeAnalyzerImpl.getLineMarkers(psiFile!!, project)
         return lineMarkers.joinToString("\n")
-    }
-
-    private fun waitForUpdated(isInBulkUpdate: Boolean, timeoutSeconds: Int = 15) {
-        val startTime = System.currentTimeMillis()
-        val endTime = startTime + TimeUnit.SECONDS.toMillis(timeoutSeconds.toLong())
-        do {
-            try {
-                return assert(isInBulkUpdate.equals(false))
-            } catch (e: Throwable) {
-                if (e is AssertionError) {
-                    sleep(1000)
-                } else {
-                    throw e
-                }
-            }
-        } while (System.currentTimeMillis() < endTime)
-        return
     }
 }

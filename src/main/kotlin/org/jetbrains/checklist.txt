@@ -1,0 +1,45 @@
+Checklist for JVM Console Application:
+
+1. Basic Features
+- application launches (without any errors/exceptions)
+- application accepts user input + provides the expected output
+- core functionality of the application (works as intended)
+
+2. Input Validation
+- valid input values
+- invalid input values (+ correct error messages + no crashes)
+- boundary conditions: minimum or maximum input values/ edge cases
+
+3. Performance/Scalability
+- Test on large datasets/many requests
+- response time/resource utilization under different load conditions
+- handling memory-intensive operations efficiently (no excessive memory consumption/leaks)
+- garbage collection + closing files/database connections
+
+4. Logging and Error Handling
+- logs are correct/informative, include errors/warnings/info messages
+
+5. Documentation
+- documentation/help messages
+
+6. Command-Line Arguments
+- various command-line arguments (properly parsed and used)
+- error messages for invalid command-line arguments
+- combinations of command-line arguments
+
+7.Compatibility
+- different operating systems + file systems
+- different JVM versions
+- different run environments (?)
+
+8. Concurrency
+- multi-threaded environment
+- concurrent environment
+- shared resources are accessed and modified safely (no race conditions/deadlocks)
+- synchronization + thread-safe practices rules
+
+9. Integration
+- interaction with external systems (if expected)
+- external dependencies (? maybe)
+
+

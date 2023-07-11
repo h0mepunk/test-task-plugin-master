@@ -8,8 +8,6 @@ import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
-import java.lang.Thread.sleep
-import java.util.concurrent.TimeUnit
 
 
 class TestTaskAction3: AnAction() {
@@ -20,9 +18,11 @@ class TestTaskAction3: AnAction() {
     }
 
     override fun actionPerformed(e: AnActionEvent) {
-        //Using the event, implement an action. For example, create and show a dialog.
         val currentProject: Project = e.project!!
-        val file = FilenameIndex.getVirtualFilesByName("Main.kt", GlobalSearchScope.allScope(currentProject)).first() // ?
+
+        // find Main.kt as VirtualFile
+        val file = FilenameIndex.getVirtualFilesByName("Main.kt", GlobalSearchScope.allScope(currentProject)).first()
+
         openFileInEditor(currentProject, file)
         Messages.showMessageDialog(currentProject, getLineMarkersForFile(currentProject), "Line markers:", Messages.getInformationIcon())
     }
@@ -33,12 +33,15 @@ class TestTaskAction3: AnAction() {
     }
 
     private fun getLineMarkersForFile(project: Project): String {
+        // getting editor and opened document from it
         val editor = FileEditorManager.getInstance(project).selectedTextEditor
-        val psiFile = editor?.document?: return "Document in editor is empty"
-        val waiter = Waiter()
-        waiter.waitForUpdated(editor.document.isInBulkUpdate)
+        val document = editor?.document?: return "Document in editor is empty"
 
-        val lineMarkers = DaemonCodeAnalyzerImpl.getLineMarkers(psiFile!!, project)
+        // waiting for document is updated after opening
+        Waiter().waitForUpdated(editor.document.isInBulkUpdate)
+
+        // getting linemarkers (they look unpleasant maybe need formatting)
+        val lineMarkers = DaemonCodeAnalyzerImpl.getLineMarkers(document!!, project)
         return lineMarkers.joinToString("\n")
     }
 }

@@ -9,7 +9,6 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
 
-
 class TestTaskAction3: AnAction() {
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
 

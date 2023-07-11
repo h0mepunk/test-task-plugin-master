@@ -3,7 +3,7 @@ package org.jetbrains
 import java.util.concurrent.TimeUnit
 
 class Waiter {
-    fun waitForUpdated(isInUpdate: Boolean, timeoutSeconds: Int = 15) {
+    fun waitForUpdated(isInUpdate: Boolean, timeoutSeconds: Int = 10) {
         val startTime = System.currentTimeMillis()
         val endTime = startTime + TimeUnit.SECONDS.toMillis(timeoutSeconds.toLong())
         do {

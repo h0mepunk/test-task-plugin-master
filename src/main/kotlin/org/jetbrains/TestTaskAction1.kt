@@ -17,7 +17,6 @@ class TestTaskAction1 : AnAction() {
     }
 
     override fun actionPerformed(e: AnActionEvent) {
-        //Using the event, implement an action. For example, create and show a dialog.
         val currentProject: Project = e.project!!
         Messages.showMessageDialog(
                 currentProject,

@@ -42,6 +42,13 @@ class TestTaskAction3: AnAction() {
 
         // getting linemarkers (they look unpleasant maybe need formatting)
         val lineMarkers = DaemonCodeAnalyzerImpl.getLineMarkers(document!!, project)
-        return lineMarkers.joinToString("\n")
+
+        // making linemarkers list look nice
+        val stringBuilder = StringBuilder()
+        lineMarkers.forEach {
+            stringBuilder.appendLine(it) //don't know how to format it in a better way
+        }
+
+        return stringBuilder.toString()
     }
 }

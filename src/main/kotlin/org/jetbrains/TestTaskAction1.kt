@@ -18,18 +18,16 @@ class TestTaskAction1 : AnAction() {
 
     override fun actionPerformed(e: AnActionEvent) {
         val currentProject: Project = e.project!!
-        Messages.showMessageDialog(
-                currentProject,
-                getKotlinPluginVersion(),
-                "Kotlin plugin version:",
-                Messages.getInformationIcon()
-        )
+        Messages.showMessageDialog(currentProject, getKotlinPluginVersion(),
+            "Kotlin plugin version:", Messages.getInformationIcon())
     }
 
     private fun getKotlinPluginVersion(): String? {
+        // getting kotlin plugin Id and installation flag
         val kotlinPluginId = PluginId.findId("org.jetbrains.kotlin")?: return "Plugin version not found :c"
         val kotlinPluginInstalled: Boolean = PluginManager.isPluginInstalled(kotlinPluginId)
 
+        // checking if plugin is installed + actions
         return if (kotlinPluginInstalled) {
             PluginManagerCore.findPlugin(kotlinPluginId)!!.version
         } else {
